@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+	
+	tools {
+    jdk 'OraceJava-8'
+
+  }
+
+    stages {
+        stage('CLONE SCM') {
+            steps {
+                echo 'Cloning GAME OF LIFE project code'
+				git 'https://github.com/devopstraininghub/game-of-life.git'
+            }
+        }
+		
+		stage('SONARqube ANALYSIS') {
+            steps {
+                echo 'code inspection of  GAME OF LIFE project code'
+			    sh 'mvn clean compile sonar:sonar'
+			    
+            }
+        }
+		
+		
+		stage('Build Artifact ') {
+            steps {
+                echo 'generating artifact with maven build tool'
+				sh 'mvn  install'
+            }
+        }
+		
+		stage('Deploy to tomcat') {
+            steps {
+                echo 'Deploying artifact to tomcat webserver '
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://100.26.50.129:8091/')], contextPath: 'gameoflife2', war: '**/*.war'
+            }
+        }
+    }
+}
