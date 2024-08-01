@@ -2,7 +2,7 @@ pipeline {
     agent any
 	
 	tools {
-    jdk 'OraceJava-8'
+    jdk 'java1.8'
 
   }
 
@@ -33,7 +33,7 @@ pipeline {
 		stage('Deploy to tomcat') {
             steps {
                 echo 'Deploying artifact to tomcat webserver '
-				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://100.26.50.129:8091/')], contextPath: 'gameoflife2', war: '**/*.war'
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://54.90.253.238:8081/')], contextPath: 'gameoflife2', war: '**/*.war'
             }
         }
     }
